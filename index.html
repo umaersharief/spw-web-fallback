@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPW - Service Provider & Worker App</title>
+    <meta name="description"
+        content="Join SPW - Service Provider & Worker App. Start earning money by offering your services on our amazing platform.">
+    <meta name="keywords" content="SPW, service provider, worker app, referral, earn money, services">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourusername.github.io/spw-referral-landing/">
+    <meta property="og:title" content="SPW - Service Provider & Worker App">
+    <meta property="og:description" content="Join SPW and start earning money by offering your services!">
+    <meta property="og:image" content="https://yourusername.github.io/spw-referral-landing/og-image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yourusername.github.io/spw-referral-landing/">
+    <meta property="twitter:title" content="SPW - Service Provider & Worker App">
+    <meta property="twitter:description" content="Join SPW and start earning money by offering your services!">
+    <meta property="twitter:image" content="https://yourusername.github.io/spw-referral-landing/og-image.png">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #667eea;
+        }
+
+        h1 {
+            margin: 0 0 20px 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .description {
+            margin: 0 0 30px 0;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .referral-info {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .referral-code {
+            font-family: 'Courier New', monospace;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .platform-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .platform-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .android-btn {
+            background: #3DDC84;
+            color: white;
+        }
+
+        .ios-btn {
+            background: #007AFF;
+            color: white;
+        }
+
+        .loading {
+            display: none;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .github-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .github-info a {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .button-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .platform-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo">🚀</div>
+        <h1>Welcome to SPW!</h1>
+        <p class="description">
+            Service Provider & Worker App<br>
+            Join thousands of professionals earning money by offering their services
+        </p>
+
+        <div class="referral-info">
+            <h3>🎯 Referral Information</h3>
+            <p><strong>Referral Code:</strong></p>
+            <div class="referral-code" id="referralCode">Loading...</div>
+            <p><strong>Role:</strong> <span id="userRole">Loading...</span></p>
+            <p><strong>Source:</strong> <span id="source">Loading...</span></p>
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="openApp()">
+                📱 Open App
+            </button>
+            <button class="btn btn-secondary" onclick="copyReferralCode()">
+                📋 Copy Code
+            </button>
+        </div>
+
+        <div class="platform-buttons">
+            <a href="https://play.google.com/store/apps/details?id=com.spw.app" class="platform-btn android-btn"
+                target="_blank">
+                📱 Google Play
+            </a>
+            <a href="https://apps.apple.com/app/spw-service-provider-worker/id123456789" class="platform-btn ios-btn"
+                target="_blank">
+                🍎 App Store
+            </a>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Opening app...</p>
+        </div>
+
+        <div class="error" id="error">
+            <p>⚠️ Unable to open the app. Please install it from the app store.</p>
+        </div>
+
+        <div class="github-info">
+            <p>🌐 This page is hosted on <a href="https://pages.github.com/" target="_blank">GitHub Pages</a></p>
+            <p>📱 <a href="#" onclick="copyCurrentUrl()">Copy this page URL</a> to share with others</p>
+        </div>
+    </div>
+
+    <script>
+        // Parse URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const referralCode = urlParams.get('ref') || 'DEMO123';
+        const role = urlParams.get('role') || 'provider';
+        const source = urlParams.get('source') || 'web';
+
+        // Update UI with referral information
+        document.getElementById('referralCode').textContent = referralCode;
+        document.getElementById('userRole').textContent = role === 'provider' ? 'Service Provider' : 'Customer';
+        document.getElementById('source').textContent = source;
+
+        // Function to open the app
+        function openApp() {
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+
+            loading.style.display = 'block';
+            error.style.display = 'none';
+
+            // Try to open the app using custom URL scheme
+            const appUrl = `spw://referral?ref=${referralCode}&role=${role}&source=${source}`;
+
+            // Create a hidden iframe to attempt to open the app
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = appUrl;
+            document.body.appendChild(iframe);
+
+            // Set a timeout to show error if app doesn't open
+            setTimeout(() => {
+                loading.style.display = 'none';
+                error.style.display = 'block';
+
+                // Remove the iframe
+                document.body.removeChild(iframe);
+            }, 3000);
+        }
+
+        // Function to copy referral code
+        function copyReferralCode() {
+            navigator.clipboard.writeText(referralCode).then(() => {
+                // Show success message
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅ Copied!';
+                btn.style.background = '#4CAF50';
+
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                alert('Failed to copy referral code');
+            });
+        }
+
+        // Function to copy current page URL
+        function copyCurrentUrl() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Page URL copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy URL: ', err);
+                alert('Failed to copy URL');
+            });
+        }
+
+        // Auto-attempt to open app after a short delay
+        setTimeout(() => {
+            openApp();
+        }, 1000);
+
+        // Track page views (optional - for analytics)
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'page_view', {
+                page_title: 'SPW Referral Landing',
+                referral_code: referralCode,
+                role: role,
+                source: source
+            });
+        }
+    </script>
+
+    <!-- Google Analytics (optional) -->
+    <!-- Replace GA_MEASUREMENT_ID with your actual Google Analytics ID -->
+    <!--
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    -->
+</body>
+
+</html>
