@@ -256,11 +256,11 @@
 
         <div class="platform-buttons">
             <a href="https://play.google.com/store/apps/details?id=com.spw.app" class="platform-btn android-btn"
-                target="_blank">
+                target="_blank" onclick="handleAppStoreClick('android')">
                 📱 Google Play
             </a>
             <a href="https://apps.apple.com/app/spw-service-provider-worker/id123456789" class="platform-btn ios-btn"
-                target="_blank">
+                target="_blank" onclick="handleAppStoreClick('ios')">
                 🍎 App Store
             </a>
         </div>
@@ -303,19 +303,44 @@
             // Try to open the app using custom URL scheme
             const appUrl = `spw://referral?ref=${referralCode}&role=${role}&source=${source}`;
 
-            // Create a hidden iframe to attempt to open the app
+            console.log('🔍 Attempting to open app with URL:', appUrl);
+
+            // Method 1: Try using window.location (works on some mobile browsers)
+            try {
+                window.location.href = appUrl;
+            } catch (e) {
+                console.log('Method 1 failed:', e);
+            }
+
+            // Method 2: Create a hidden iframe to attempt to open the app
             const iframe = document.createElement('iframe');
             iframe.style.display = 'none';
             iframe.src = appUrl;
             document.body.appendChild(iframe);
+
+            // Method 3: Use window.open as fallback
+            setTimeout(() => {
+                try {
+                    window.open(appUrl, '_blank');
+                } catch (e) {
+                    console.log('Method 3 failed:', e);
+                }
+            }, 500);
 
             // Set a timeout to show error if app doesn't open
             setTimeout(() => {
                 loading.style.display = 'none';
                 error.style.display = 'block';
 
+                // Show app store buttons prominently
+                document.querySelector('.platform-buttons').style.display = 'flex';
+
                 // Remove the iframe
-                document.body.removeChild(iframe);
+                if (document.body.contains(iframe)) {
+                    document.body.removeChild(iframe);
+                }
+
+                console.log('⚠️ App not opened, showing app store options');
             }, 3000);
         }
 
@@ -352,6 +377,75 @@
         setTimeout(() => {
             openApp();
         }, 1000);
+
+        // Function to detect if app was opened successfully
+        function detectAppOpen() {
+            // Check if the page is still visible (app might have opened)
+            if (document.hidden || document.webkitHidden) {
+                console.log('✅ App appears to have opened successfully');
+                // Hide loading and error states
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'none';
+                return true;
+            }
+            return false;
+        }
+
+        // Listen for page visibility changes
+        document.addEventListener('visibilitychange', detectAppOpen);
+        document.addEventListener('webkitvisibilitychange', detectAppOpen);
+
+        // Check if user came back from app store (after installing)
+        function checkForReturnFromAppStore() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const fromAppStore = urlParams.get('fromAppStore');
+
+            if (fromAppStore === 'true') {
+                console.log('🔄 User returned from app store, attempting to open app...');
+                // Try to open app again
+                setTimeout(() => {
+                    openApp();
+                }, 1000);
+            }
+        }
+
+        // Check on page load
+        checkForReturnFromAppStore();
+
+        // Function to handle app store clicks
+        function handleAppStoreClick(platform) {
+            console.log(`📱 User clicked ${platform} app store`);
+
+            // Store referral data in localStorage for when they return
+            const referralData = {
+                code: referralCode,
+                role: role,
+                source: source,
+                timestamp: new Date().toISOString(),
+                platform: platform
+            };
+
+            localStorage.setItem('spwReferralData', JSON.stringify(referralData));
+
+            // Show instructions
+            const instructions = document.createElement('div');
+            instructions.className = 'instructions';
+            instructions.innerHTML = `
+                <div style="background: rgba(76, 175, 80, 0.2); border: 1px solid rgba(76, 175, 80, 0.5); border-radius: 8px; padding: 15px; margin: 20px 0; text-align: center;">
+                    <p>📱 <strong>After installing the app:</strong></p>
+                    <p>1. Open the SPW app</p>
+                    <p>2. Your referral code <strong>${referralCode}</strong> will be automatically applied</p>
+                    <p>3. Complete your signup to get started!</p>
+                </div>
+            `;
+
+            // Insert instructions after the platform buttons
+            const platformButtons = document.querySelector('.platform-buttons');
+            platformButtons.parentNode.insertBefore(instructions, platformButtons.nextSibling);
+
+            // Hide the error message since user is going to app store
+            document.getElementById('error').style.display = 'none';
+        }
 
         // Track page views (optional - for analytics)
         if (typeof gtag !== 'undefined') {
